@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MinionService } from '../services/minion.service';
 import { Minion } from '../interfaces/minion';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-minions-info',
-  imports: [RouterLink],
+  imports: [RouterLink, RouterOutlet],
   templateUrl: './minions-info.component.html'
 })
 

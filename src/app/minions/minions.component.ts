@@ -1,43 +1,51 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, SimpleChanges } from '@angular/core';
 import { Minion } from '../interfaces/minion';
-import { FormsModule } from '@angular/forms';
 import { MinionService } from '../services/minion.service';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-minion-card',
-  imports: [FormsModule, RouterLink],
+  imports: [RouterLink, RouterOutlet],
   templateUrl: './minions.component.html'
 })
 
-export class MinionCardComponent implements OnChanges, OnInit {
-  constructor(private minionService: MinionService) { };
-
-  minions !: Minion[];
+export class MinionCardComponent implements OnInit {
+  minions!: Minion[];
   displayMinions!: Minion[];
+  
+  // Search term that will be bound to the input field
   @Input() search: string = '';
 
+  constructor(private minionService: MinionService) { }
+
   ngOnInit(): void {
+    // Fetch minions from the service when the component is initialized
     this.minionService.getMinions()
       .subscribe({
         next: minions => {
           this.minions = minions;
-          this.displayMinions = minions
-        }, 
+          this.displayMinions = minions;  // Initially display all minions
+        },
         error: error => console.log("Se ha producido un error", error)
       });
-    this.displayMinions = this.minions;
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    // this.filter();
-  }
-
+  // Detect changes in the search term and update the display list
   onInputChange(event: Event): void {
-    this.search = (event.target as HTMLInputElement).value.toLowerCase();
+    const searchTerm = (event.target as HTMLInputElement).value.toLowerCase();
+    this.search = searchTerm;
+    this.filterMinions();
   }
 
-  // filter() {
-  //   this.displayMinions = this.minionService.filterMinions(this.search);
-  // }
+  // Filter the minions based on the search term
+  filterMinions(): void {
+    if (this.search.trim() === '') {
+      this.displayMinions = this.minions;  // Show all minions if no search term
+    } else {
+      this.displayMinions = this.minions.filter(minion => 
+        minion.name.toLowerCase().includes(this.search) || 
+        minion.bio.toLowerCase().includes(this.search)
+      );
+    }
+  }
 }

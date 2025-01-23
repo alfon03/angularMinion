@@ -1,37 +1,45 @@
 <div class="container mt-4">
-
-    <!-- Este es el más utilizado  -->
-    <!-- <input type="text" class="mb-2" placeholder="search" id="search" name="search" [value]="search"
-        (input)="onInputChange($event)">
-    <input #iSearch type="text" [value]="search" class="mb-2" placeholder="search" id="search" name="search"
-        [value]="search" (input)="search=iSearch.value"> -->
-    <!-- <form class="my-2 d-flex align-items-center w-50 mt-2">
-        <input class="form-control me-2 flex-grow-1" type="text" placeholder="Search" id="search" name="search"
-            [(ngModel)]="search">
-        <button class="btn btn-primary" (click)="filter()">Search</button>
-    </form> -->
-
-    <div class="row row-cols-4 g-4">
-        @for (minion of displayMinions; track minion.name) {
-
-        <div class="col">
-            <div class="card h-100">
-                <img [src]="minion.img" class="card-img-top" alt="..." style="height: 300px;">
-
-                <div class="card-body">
-                    <h5 class="card-title">{{ minion.name }}</h5>
-                    <p class="card-text">{{ minion.bio }}</p>
-                    <p class="card-text"><small class="text-muted">Año de nacimiento: {{ minion.birth }}</small></p>
-                    @if (minion.side == "de los buenos") {
-                    <img src="/assets/img/de los buenos.PNG" alt="" width="45px">
-                    } @else if (minion.side == "malvado") {
-                    <img src="/assets/img/de los malos.PNG" alt="" width="45px">
-                    }
-                    <a routerLink="/minionsInfo/{{minion.id}}" class="btn btn-primary">Go somewhere</a>
-                </div>
+    <!-- Formulario de búsqueda (opcional, si lo necesitas) -->
+    <form class="d-flex mb-4" role="search">
+      <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+      <button class="btn btn-outline-primary" type="submit">Buscar</button>
+    </form>
+  
+    <!-- Tarjetas responsivas con minions -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+      @for (minion of displayMinions; track minion.name) {
+      <div class="col">
+        <div class="card h-100">
+          <img 
+            [src]="minion.img" 
+            class="card-img-top" 
+            alt="{{ minion.name }}" 
+            style="object-fit: cover; height: 250px;" />
+  
+          <div class="card-body">
+            <h5 class="card-title">{{ minion.name }}</h5>
+            <p class="card-text">{{ minion.bio }}</p>
+            <p class="card-text">
+              <small class="text-muted">Año de nacimiento: {{ minion.birth }}</small>
+            </p>
+            
+            <!-- Lógica para mostrar las imágenes de 'buenos' o 'malvados' -->
+            @if (minion.side == "de los buenos") {
+              <img src="/assets/img/de los buenos.PNG" alt="De los buenos" width="45px" />
+            } @else if (minion.side == "malvado") {
+              <img src="/assets/img/de los malos.PNG" alt="De los malos" width="45px" />
+            }
+  
+            <!-- Enlaces a las vistas correspondientes -->
+            <div class="d-flex justify-content-between mt-3">
+              <a routerLink="/minions/{{ minion.id }}" class="btn btn-outline-primary btn-sm">Ver aquí</a>
+              <a routerLink="/minionsInfo/{{ minion.id }}" class="btn btn-outline-secondary btn-sm">Ver más info</a>
             </div>
+          </div>
         </div>
-        }
+      </div>
+      }
     </div>
-
-</div>
+  </div>
+  <router-outlet></router-outlet>
+  
